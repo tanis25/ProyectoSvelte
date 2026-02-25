@@ -4,11 +4,10 @@ import { env } from '$env/dynamic/private';
 const { Pool } = pkg;
 
 export const pool = new Pool({
-  host: env.DB_HOST,
-  user: env.DB_USER,
-  password: env.DB_PASSWORD,
-  database: env.DB_NAME,
-  port: Number(env.DB_PORT),
+  connectionString: env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 /* =========================
