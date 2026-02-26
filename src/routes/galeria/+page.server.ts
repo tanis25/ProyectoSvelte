@@ -1,6 +1,9 @@
 import type { Actions, PageServerLoad } from './$types';
 import { getImages, saveImage, deleteImage } from '$lib/server/db';
 
+const errorMessage =
+  'Únicamente se permiten archivos de imagen (JPG, PNG, WEBP)';
+
 export const load: PageServerLoad = async () => {
   try {
     const images = await getImages();
@@ -18,24 +21,18 @@ export const actions: Actions = {
       const formData = await request.formData();
       const file = formData.get('file') as File;
 
-      const errorMessage =
-        'Únicamente se permiten archivos de imagen (JPG, PNG, WEBP)';
-
       const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
       const allowedExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
       const maxSize = 5 * 1024 * 1024; // 5MB
 
-      // Validar que exista archivo
       if (!file || file.size === 0) {
         return { error: errorMessage };
       }
 
-      // Validar tipo MIME
       if (!allowedTypes.includes(file.type)) {
         return { error: errorMessage };
       }
 
-      // Validar extensión
       const fileName = file.name.toLowerCase();
       const hasValidExtension = allowedExtensions.some(ext =>
         fileName.endsWith(ext)
@@ -45,7 +42,6 @@ export const actions: Actions = {
         return { error: errorMessage };
       }
 
-      // Validar tamaño
       if (file.size > maxSize) {
         return { error: errorMessage };
       }
@@ -59,9 +55,7 @@ export const actions: Actions = {
 
     } catch (error) {
       console.error(error);
-      return {
-        error: 'Únicamente se permiten archivos de imagen (JPG, PNG, WEBP)'
-      };
+      return { error: errorMessage };
     }
   },
 
@@ -83,5 +77,4 @@ export const actions: Actions = {
       return { error: 'Error al eliminar la imagen' };
     }
   }
-
 };
