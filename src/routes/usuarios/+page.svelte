@@ -143,35 +143,81 @@
     flex-direction: column;
     gap: 10px;
   }
+  
+  /* ===== NUEVO DISEÑO MEJORADO PARA PAGINACIÓN ===== */
   .paginacion {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
-    margin-top: 20px;
+    gap: 12px;
+    margin-top: 30px;
+    margin-bottom: 10px;
   }
+  
   .paginacion a, .paginacion span {
-    padding: 8px 12px;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
     text-decoration: none;
-    color: #333;
-    font-weight: 500;
-    display: inline-block;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
-  .paginacion a.activo {
+  
+  .paginacion a {
+    background: white;
+    color: #7B1E3A;
+    border: 2px solid #7B1E3A;
+    font-size: 1.3rem;
+  }
+  
+  .paginacion a:hover:not(.disabled) {
     background: #7B1E3A;
     color: white;
-    border-color: #7B1E3A;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(123, 30, 58, 0.4);
   }
-  .paginacion a:hover:not(.activo) {
-    background: #f0f0f0;
-  }
+  
   .paginacion a.disabled {
+    border-color: #ccc;
+    color: #ccc;
     pointer-events: none;
-    opacity: 0.5;
+    box-shadow: none;
   }
+  
+  .paginacion span.activo {
+    background: linear-gradient(135deg, #7B1E3A, #9f2b4f);
+    color: white;
+    border: 2px solid #7B1E3A;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0 8px 20px rgba(123, 30, 58, 0.4);
+    width: 50px;
+    height: 50px;
+  }
+  
+  /* Información adicional de páginas */
+  .paginacion-info {
+    text-align: center;
+    margin-top: 15px;
+    color: #666;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .paginacion-info span {
+    color: #7B1E3A;
+    font-weight: 700;
+    background: rgba(123, 30, 58, 0.1);
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin: 0 5px;
+  }
+  /* ===== FIN NUEVO DISEÑO ===== */
+  
   .inicio-btn {
     display: inline-block;
     margin-bottom: 20px;
@@ -413,6 +459,20 @@
     .btn-filtro {
       flex: 1;
     }
+    
+    /* Responsive para paginación */
+    .paginacion {
+      gap: 8px;
+    }
+    .paginacion a, .paginacion span {
+      width: 40px;
+      height: 40px;
+      font-size: 1.1rem;
+    }
+    .paginacion span.activo {
+      width: 45px;
+      height: 45px;
+    }
   }
 </style>
 
@@ -485,7 +545,7 @@
     </table>
   </div>
 
-  <!-- PAGINADO CON 4 FLECHAS -->
+  <!-- PAGINADO CON DISEÑO MEJORADO - 4 FLECHAS -->
   {#if data.totalPages > 0}
     {@const current = data.page}
     {@const total = data.totalPages}
@@ -497,7 +557,7 @@
         class={current <= 1 ? 'disabled' : ''}
         title="Primera página"
       >
-        ⏮️
+        ⏮
       </a>
       
       <!-- Flecha anterior -->
@@ -506,10 +566,10 @@
         class={current <= 1 ? 'disabled' : ''}
         title="Página anterior"
       >
-        ◀️
+        ◀
       </a>
       
-      <!-- Número de página actual -->
+      <!-- Número de página actual (con diseño destacado) -->
       <span class="activo">{current}</span>
       
       <!-- Flecha siguiente -->
@@ -518,7 +578,7 @@
         class={current >= total ? 'disabled' : ''}
         title="Página siguiente"
       >
-        ▶️
+        ▶
       </a>
       
       <!-- Flecha fin (última página) -->
@@ -527,8 +587,13 @@
         class={current >= total ? 'disabled' : ''}
         title="Última página"
       >
-        ⏭️
+        ⏭
       </a>
+    </div>
+    
+    <!-- Información adicional de paginación -->
+    <div class="paginacion-info">
+      Página <span>{current}</span> de <span>{total}</span>
     </div>
   {/if}
 </div>
